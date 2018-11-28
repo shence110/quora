@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="tiny.quora.dao.QuestionDao">
+
+    <select id="searchQuestions" resultType="tiny.quora.model.Question">
+        SELECT
+            id,user_id,title,content,comment_cnt,create_date,update_date
+        FROM
+            question
+        <where>
+            <if test="userId != 0">user_id=#{userId}</if>
+        </where>
+        ORDER BY
+            id DESC
+        LIMIT
+            #{offset},#{limit}
+    </select>
+
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="tiny.quora.dao.AccountDao">
+    <sql id="t_account">user_account</sql>
+
+
+    <insert id="addAccount">
+        INSERT INTO <include refid="t_account"/>
+            (user_id,account_val,account_type,password,salt,create_date,update_date)
+        VALUES
+            (#{account.userId},#{account.accountVal},#{account.accountType},#{account.password},
+            #{account.salt},#{account.createDate},#{account.createDate})
+    </insert>
+
+
+    <update id="updateAccountById">
+        UPDATE <include refid="t_account"/>
+        <trim prefix=" SET " suffix=" WHERE id=#{account.id} " suffixOverrides=",">
+            <if test="account.password != null">password=#{account.password},</if>
+            <if test="account.salt != null">salt=#{account.salt},</if>
+            <if test="account.updateDate != null">update_date=#{account.updateDate},</if>
+        </trim>
+    </update>
+    <update id="updateByAccountVal">
+        UPDATE <include refid="t_account"/>
+        <trim prefix=" SET " suffix=" WHERE account_val=#{account.accountVal} " suffixOverrides=",">
+            <if test="account.password != null">password=#{account.password},</if>
+            <if test="account.salt != null">salt=#{account.salt},</if>
+            <if test="account.updateDate != null">update_date=#{account.updateDate},</if>
+        </trim>
+    </update>
+
+
+    <select id="searchByUserId" resultType="tiny.quora.model.Account">
+        SELECT
+            account_val,account_type,password,salt
+        FROM
+            <include refid="t_account"/>
+        WHERE
+            user_id=#{userId}
+        ORDER BY
+            account_type
+    </select>
+    <select id="searchByAccountVal" resultType="tiny.quora.model.Account">
+        SELECT
+            user_id,account_type,password,salt
+        FROM
+            <include refid="t_account"/>
+        WHERE
+            account_val=#{accountVal}
+    </select>
+
+
+    <select id="existByAccountVal" resultType="tiny.quora.model.Account">
+        SELECT
+            id
+        FROM
+            <include refid="t_account"/>
+        WHERE
+            account_val=#{accountVal}
+    </select>
+
+</mapper>
+
+
+<!--private int id;-->
+<!--private int userId;-->
+<!--private String accountVal;-->
+<!--private int accountType;-->
+<!--private String password;-->
+<!--private String salt;-->
+<!--private String createDate;-->
+<!--private String updateDate;-->
+
+

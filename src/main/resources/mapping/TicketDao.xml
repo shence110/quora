@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="tiny.quora.dao.TicketDao">
+    <sql id="t_ticket">login_ticket</sql>
+
+
+    <insert id="addTicket">
+        INSERT INTO <include refid="t_ticket"/>
+            (user_id,ticket,expire_time,status)
+        VALUES
+            (#{loginTicket.userId},#{loginTicket.ticket},#{loginTicket.expireTime},#{loginTicket.status})
+    </insert>
+
+
+    <update id="setExpired">
+        UPDATE
+            <include refid="t_ticket"/>
+        SET
+            status=1
+        WHERE
+            ticket=#{ticket}
+    </update>
+
+
+    <select id="selectByTicket" resultType="tiny.quora.model.LoginTicket">
+        SELECT
+            user_id,expire_time,status
+        FROM
+            <include refid="t_ticket"/>
+        WHERE
+            ticket=#{ticket} AND status=0
+    </select>
+
+</mapper>
